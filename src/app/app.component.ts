@@ -47,7 +47,7 @@ export class AppComponent {
     url:"",
     itag:"22"
   };
-  downloading:boolean = true;
+  downloading:boolean = false;
   progress:string = " 0 bytes";
   totalAvailable:boolean = false;
   progressPercentage:string = "0%";
