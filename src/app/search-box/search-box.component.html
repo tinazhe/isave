@@ -1,0 +1,59 @@
+
+ <div class="form-container">
+
+  <form [formGroup]="youtubeForm" (ngSubmit)="onSubmit()">
+          <input  [required]="true" type="text" name="url" formControlName="url" placeholder="Paste youtube video url here to download">
+      <div>
+          <button aria-label="search"  class="btn" type="submit">Search</button>
+      </div>
+  </form>
+  <div *ngIf="errorMessage.length > 1" class="error">
+    {{errorMessage}}
+  </div>
+</div>
+<div *ngIf="loading" class="loader"></div>
+<section *ngIf="results" class="results">
+  <div class="results-container">
+      <div class="result">
+        <iframe
+          [src]="video.iframeUrl | safe:'resourceUrl'">
+          </iframe >
+          <!-- <img src="../assets/vlcsnap-2021-07-18-17h03m01s836.png" [alt]="video.title"> -->
+          <div class="video-details">
+              <div class="result-title">{{ video.title }}</div>
+                <hr>
+              <div class="selection">
+                <div class="itag" *ngFor="let quality of video.formarts; let i = index" >
+                  <!-- <span class="size">{{quality.size}}</span> -->
+                  <span class="size"> {{ quality.size | formatBytes }} </span>
+                  <span class="tag default">{{quality.qualityLabel}}</span>
+                  <span>
+                    <!-- <button type="button"
+                                fileSaver
+                                [method]="'GET'"
+                                [fileName]="'videoName.mp4'"
+                                [url]="quality.url"
+                        >Download Video</button> -->
+                    <button aria-label="download" class="btn" (click)="getVideoOld(quality.itag, quality.size)">Download</button>
+                  </span>
+                </div>
+
+              </div>
+          </div>
+      </div>
+
+  </div>
+</section>
+
+<div class="download-progress" *ngIf="downloading">
+  <div style="padding: 8px;">Downloading</div>
+  <div *ngIf="totalAvailable; else unavailable" class="download-progress-bar">
+      <div [ngStyle]="{width: progressPercentage+'%'}" class="download-progress-bar-value">
+        <!-- {{progressPercentage + '%'}} -->
+      </div>
+
+  </div>
+  <ng-template #unavailable>
+    Downloading: {{ progress }}
+  </ng-template >
+</div>

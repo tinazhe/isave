@@ -1,0 +1,18 @@
+  <nav>
+      <div class="nav-container">
+          <div class="logo">iSave</div>
+      <ul class="hide">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+      </ul>
+      <button (click)="toggleMenu()" aria-label="menu" style="width: auto;"  class="menu">
+          <div class="line"></div>
+          <div style="margin-top: 4px;" class="line"></div>
+          <div style="margin-top: 4px;"  class="line"></div>
+      </button>
+      </div>
+  </nav>
+  <div *ngIf="showMenu" class="mobile-menu">
+    <div><a href="#about">About</a></div>
+    <div><a href="#contact">Contact</a></div>
+  </div>
