@@ -2,9 +2,11 @@
  <div class="form-container">
 
   <form [formGroup]="youtubeForm" (ngSubmit)="onSubmit()">
-          <input  [required]="true" type="text" name="url" formControlName="url" placeholder="Paste youtube video url here to download">
+         <div class="form-control">
+            <input (paste)=handlePaste($event)  [required]="true" type="text" name="url" formControlName="url" placeholder="Paste youtube video url here to download">
+         </div>
       <div>
-          <button aria-label="search"  class="btn" type="submit">Search</button>
+          <button aria-label="search"  class="btn" type="submit">Download</button>
       </div>
   </form>
   <div *ngIf="errorMessage.length > 1" class="error">
@@ -28,13 +30,9 @@
                   <span class="size"> {{ quality.size | formatBytes }} </span>
                   <span class="tag default">{{quality.qualityLabel}}</span>
                   <span>
-                    <!-- <button type="button"
-                                fileSaver
-                                [method]="'GET'"
-                                [fileName]="'videoName.mp4'"
-                                [url]="quality.url"
-                        >Download Video</button> -->
-                    <button aria-label="download" class="btn" (click)="getVideoOld(quality.itag, quality.size)">Download</button>
+
+                    <button aria-label="download"  [ngClass]="[bntStyle]" (click)="getVideoNew(quality.itag, quality.size, video.size720p)" style="padding: 16px;"> Download</button>
+
                   </span>
                 </div>
 
@@ -45,15 +43,4 @@
   </div>
 </section>
 
-<div class="download-progress" *ngIf="downloading">
-  <div style="padding: 8px;">Downloading</div>
-  <div *ngIf="totalAvailable; else unavailable" class="download-progress-bar">
-      <div [ngStyle]="{width: progressPercentage+'%'}" class="download-progress-bar-value">
-        <!-- {{progressPercentage + '%'}} -->
-      </div>
 
-  </div>
-  <ng-template #unavailable>
-    Downloading: {{ progress }}
-  </ng-template >
-</div>

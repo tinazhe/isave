@@ -1,7 +1,7 @@
 {
-  "name": "isave",
+  "name": "iSave | Video Downloader",
   "short_name": "isave",
-  "theme_color": "#2f3363",
+  "theme_color": "#bb2525",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

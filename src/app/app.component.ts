@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 
 export interface Video{
+  size720p:string,
   iframeUrl: string,
   title: string,
   description:string,
@@ -22,16 +24,22 @@ export interface Format{
     itag: string,
     size: string
 }
+declare let gtag: Function;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
   loading:boolean = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
+  ngOnInit() {
+
+}
+
+
 
 }

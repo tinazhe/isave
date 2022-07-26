@@ -5,7 +5,7 @@ export class FormatBytesPipe implements PipeTransform {
 
   transform(stringBytes:string, decimals = 2):string {
     if(stringBytes == "null"){
-      return 'MB';
+      return 'unknown';
     }
     console.log("Bytes: " + stringBytes);
     let bytes = Number(stringBytes);

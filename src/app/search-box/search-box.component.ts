@@ -10,14 +10,12 @@ import { Format, Video } from '../app.component';
   styleUrls: ['./search-box.component.scss']
 })
 export class SearchBoxComponent implements OnInit {
+  bntStyle: string = "";
   loading:boolean = false;
   results = false;
-  downloading:boolean = false;
-  progress:string = " 0 bytes";
-  totalAvailable:boolean = false;
-  progressPercentage:string = "0";
   errorMessage:string = "";
   video: Video = {
+    size720p:"",
     iframeUrl:"",
     title:"Create an HTTP tunnel to share your localhost server on the internet via HTTPS with",
     description:"Loading ...",
@@ -29,8 +27,10 @@ export class SearchBoxComponent implements OnInit {
     qualityLabel:"320p",
     url:"",
     itag:"22",
-    size:""
+    size:"12344"
   };
+  downloadUrls:string = "https://powerful-ocean-63122.herokuapp.com/test";
+  size720p:string = "0"
 
   constructor(private http: HttpClient) { }
 
@@ -46,12 +46,13 @@ export class SearchBoxComponent implements OnInit {
     this.http.get<Video>('https://powerful-ocean-63122.herokuapp.com/search', options).subscribe( data => {
 
       this.video = {
-        iframeUrl:data.iframeUrl,
+        size720p: data.size720p,
+        iframeUrl: data.iframeUrl,
         title: data.title,
-        description:data.description,
-        formarts:data.formarts,
-        thumbnail_url:data.thumbnail_url,
-        video_url:data.video_url
+        description: data.description,
+        formarts: data.formarts,
+        thumbnail_url: data.thumbnail_url,
+        video_url: data.video_url
       };
       this.selectedQuality = this.video.formarts[0];
       this.errorMessage = "";
@@ -59,7 +60,7 @@ export class SearchBoxComponent implements OnInit {
       this.loading = false;
       console.log(this.video);
     },
-    (err)=>{
+    ( err ) => {
       this.loading = false;
       this.errorMessage = "Video not found";
       console.log("url not found"+ err.message);
@@ -67,60 +68,26 @@ export class SearchBoxComponent implements OnInit {
   }
 
   handlePaste(event:any){
-    console.log(event.clipboardData.getData('Text'));
-    this.youtubeForm.controls["url"].reset;
+    // console.log(event.clipboardData.getData('Text'));
+    this.youtubeForm.controls["url"].reset("");
     this.youtubeForm.controls["url"].patchValue(event.clipboardData.getData('Text'));
     this.onSubmit();
   }
 
-  download(url: string, itag:string): Observable<HttpEvent<Blob>> {
-
-    return this.http.get("https://powerful-ocean-63122.herokuapp.com/download", {
-      responseType: 'blob',
-      reportProgress:true,
-      observe: 'events',
-      params: {
-        'url':url,
-        'itag': itag
-      }
-    });
+  getVideoNew(itag:string, size:string, size720pQ:string){
+    this.bntStyle = "btn-change";
+    console.log("Download initiated");
+    const a = document.createElement('a');
+    // const objectUrl = URL.createObjectURL(event.body);
+    a.href = "https://powerful-ocean-63122.herokuapp.com/test?itag="+itag+"&url="+this.youtubeForm.value.url+"&size="+size+"&size720pQ="+size720pQ;
+    console.log(a.href);
+    a.download = this.video.title + ".mp4";
+    a.click();
+    // URL.revokeObjectURL(objectUrl);
   }
 
-   getVideoOld(itag:string, size:string){
-    let maxSize = size;
-    this.download(this.youtubeForm.value.url, itag).subscribe(event => {
-
-          if (event.type === HttpEventType.DownloadProgress) {
-            this.downloading = true;
-            console.log(this.formatBytes(event.loaded));
-            this.progress = this.formatBytes(event.loaded);
-            if(Number(maxSize)){
-              this.totalAvailable = true;
-              this.progressPercentage = Math.round(event.loaded / Number(maxSize) * 100).toString();
-              console.log("Loaded" + Math.round(event.loaded / Number(maxSize) * 100));
-
-            } else{
-              this.totalAvailable = false;
-              console.log("event total unavailable");
-            }
-
-          }
-          if (event.type === HttpEventType.Response) {
-              this.downloading = false;
-              console.log("donwload completed");
-              const a = document.createElement('a');
-              const objectUrl = URL.createObjectURL(event.body)
-              a.href = objectUrl;
-              a.download = "isave.mp4";
-              a.click();
-              URL.revokeObjectURL(objectUrl);
-          }
 
 
-    }, (err)=>{
-      console.log(err);
-    });
-  }
   formatBytes(bytes:number, decimals = 2):string {
     if (bytes === 0) return '0 Bytes';
 
